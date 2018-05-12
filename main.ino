@@ -10,6 +10,7 @@ struct Pod {
   long pos;
   long accel;
   int state;
+  byte sendData[3];
 };
 
 struct DataPacket {
@@ -87,13 +88,30 @@ DataPacket readData () {
   }
   return dataPacket;
 }
+       
+controlPod() {
+  if (pos > 15000 && (state != 4 || state != 5)) {
+    pod.sendData[1] = 0x04;
+    pod.state = 4;
+    Wire.write(pod.sendData,3);
+  }
+}
 
 void setup() {
   // put your setup code here, to run once:
+  pod.state = 0;
   Wire.begin();
   Serial.begin(9600);
   Wire.beginTransmission(devAddr);
+  pod.sendData[0] = 0x56;
+  pod.sendData[1] = 0x01;
+  pod.sendData[2] = 0x23;
   pod.vel = pod.pos = 0;
+  Wire.write(pod.sendData,3);
+  pod.state = 1;
+  pod.sendData[1] = 0x02;
+  Wire.write(pod.sendData,3);
+  pod.state = 2;
 }
 
 void loop() {
