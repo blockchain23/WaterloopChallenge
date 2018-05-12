@@ -70,7 +70,7 @@ DataPacket* readData(DataPacket *dataPacket) {
 
 void controlPod() {
   if (pod.pos > (30000000-5000000) && (pod.state != 4 || pod.state != 5)) {
-    pod.sendData[1] = 0x04; // start breaking
+    pod.sendData[1] = 0x04; // start braking
     pod.state = 4;
     Wire.write(pod.sendData,3);
   }
