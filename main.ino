@@ -23,5 +23,6 @@ void loop() {
     calcPosVel();
     sendToServer();
     controlPod();
+    delay(20);
   }
 }
