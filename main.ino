@@ -6,13 +6,28 @@ const int commBytes = 32;
 struct pod {
   long vel;
   long pos;
+  long accel;
   int state;
 };
 
 void calcPosVel() {
-  long accel = (dataPacket.accelFront + dataPacket.accelMid + dataPacket.accelRear)/3.0;
+  pod.accel = (dataPacket.accelFront + dataPacket.accelMid + dataPacket.accelRear)/3.0;
   pod.pos += vel*0.002 + 0.5*accel*0.002*0.002;
   pod.vel = vel + accel*0.002;  
+}
+
+void sendToServer() {
+  StaticJsonBuffer<50> jsonBuffer;
+  JsonObject& root = jsonBuffer.createObject();
+  root["velocity"] = pod.vel;
+  root["distance"] = pod.pos;
+  root["acceleration"] = pod.accel;
+  root["propulsion_temp"] = dataPacket.propulsionTemp;
+  root["braking_temp"] = dataPacket.brakingTemp;
+  root["motherboard_temp"] = dataPacket.motherboardTemp;
+  root["pod_state"] = pod.state;
+  root["time_since_start"] = dataPacket.time;
+  root.printTo(Serial);
 }
 
 void setup() {
@@ -20,7 +35,7 @@ void setup() {
   Wire.begin();
   Serial.begin(9600);
   Wire.beginTransmission(devAddr);
-  dataPacket.vel = 0;
+  pod.vel = pod.pos = 0;
 }
 
 void loop() {
