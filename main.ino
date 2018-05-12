@@ -3,9 +3,9 @@
 const int devAddr = 0x5A;
 const int commBytes = 32;
 DataPacket dataPacket;
+Pod pod;
 
-
-struct pod {
+struct Pod {
   long vel;
   long pos;
   long accel;
