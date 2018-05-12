@@ -50,47 +50,32 @@ void sendToServer() {
 }
 
 DataPacket readData () {
+  uint8_t &buffer[32];
   for (int i = 0; i < 32; i++) {
-    DataPacket dataPacket;
-    if(i==0{
-      dataPacket.startingByte = Wire.read()
-    }
-    else if(i==1){
-      dataPacket.errorStates = Wire.read()
-    }
-    else if(i==2){
-      dataPacket.currentPodState = Wire.read()
-    }
-     else if(7 > i > 2){
-      dataPacket.timeStamp[i-3] = Wire.read()
-    }
-    else if(11 > i > 6){
-      dataPacket.accelFront[i-7] = Wire.read()
-    }
-    else if(15 > i > 10){
-      dataPacket.accelMiddle[i-11] = Wire.read()
-    }
-    else if(19 > i > 14){
-      dataPacket.accelRear[i-15] = Wire.read()
-    }
-    else if(23 > i > 18){
-      dataPacket.tempBraking[i-19] = Wire.read()
-    }
-    else if(27 > i > 22){
-      dataPacket.tempPropul[i-23] = Wire.read()
-    }
-    else if(31 > i > 26){
-      dataPacket.tempMotherboard[i-23] = Wire.read()
-    }
-    else{
-      dataPacket.endingByte = Wire.read()
-    }
+    buffer[i] = Wire.read();
   }
+  dataPacket = (DataPacket)buffer
   return dataPacket;
 }
-       
+
+struct DataPacket {
+  uint8_t startingByte;
+  uint8_t errorStates;
+  uint8_t currentPodState;
+
+  //Where each element is a byte for the 32 bit data.
+  float32_t timeStamp;
+  float32_t accelFront;
+  float32_t accelMiddle;
+  float32_t accelRear;
+  float32_t tempBraking;
+  float32_t tempPropul;
+  float32_t tempMotherboard;
+  uint8_t endingByte;
+};
+
 controlPod() {
-  if (pos > 15000 && (state != 4 || state != 5)) {
+  if (pos > (30000000-50000) && (state != 4 || state != 5)) {
     pod.sendData[1] = 0x04;
     pod.state = 4;
     Wire.write(pod.sendData,3);
