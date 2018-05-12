@@ -48,8 +48,9 @@ void sendToServer() {
   root.printTo(Serial);
 }
 
-for (int i = 0; i < 32; i++) {
-    initDataPacket = parseDataPacket(Wire.read(), i)
+DataPacket readData () {
+  for (int i = 0; i < 32; i++) {
+    DataPacket dataPacket;
     if(i==0{
       dataPacket.startingByte = Wire.read()
     }
@@ -83,8 +84,9 @@ for (int i = 0; i < 32; i++) {
     else{
       dataPacket.endingByte = Wire.read()
     }
+  }
+  return dataPacket;
 }
-       
 
 void setup() {
   // put your setup code here, to run once:
@@ -98,7 +100,7 @@ void loop() {
   // put your main code here, to run repeatedly:
   
   while (vel > 0) {
-    readData();
+    dataPacket = readData();
     calcPosVel();
     sendToServer();
     controlPod();
