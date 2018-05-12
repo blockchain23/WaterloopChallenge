@@ -4,15 +4,15 @@ const int devAddr = 0x5A;
 const int commBytes = 32;
 
 struct pod {
-  int vel;
-  int pos;
+  long vel;
+  long pos;
   int state;
 };
 
 void calcPosVel() {
-  accel = (dataPacket.accelFront + dataPacket.accelMid + dataPacket.accelRear)/3.0;
-  pos += vel*0.002 + 0.5*accel*0.002*0.002;
-  vel = vel + accel*0.002;  
+  long accel = (dataPacket.accelFront + dataPacket.accelMid + dataPacket.accelRear)/3.0;
+  pod.pos += vel*0.002 + 0.5*accel*0.002*0.002;
+  pod.vel = vel + accel*0.002;  
 }
 
 void setup() {
